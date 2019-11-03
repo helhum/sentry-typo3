@@ -1,0 +1,30 @@
+{
+  "name": "helhum/sentry-typo3",
+  "license": "GPL-2.0-or-later",
+  "description": "Sentry Integration for TYPO3",
+  "keywords": [
+    "TYPO3",
+    "sentry",
+    "error-reporting"
+  ],
+  "support": {
+    "issues": "https://github.com/helhum/sentry-typo3"
+  },
+  "homepage": "https://helhum.io",
+  "authors": [
+    {
+      "name": "Helmut Hummel",
+      "email": "typo3@helhum.io"
+    }
+  ],
+  "require": {
+    "sentry/sentry": "^2.1",
+    "php-http/guzzle6-adapter": "^2.0",
+    "typo3/cms-core": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Helhum\\SentryTypo3\\": "src/"
+    }
+  }
+}
