@@ -10,6 +10,13 @@ The package is a wrapper for https://github.com/getsentry/sentry-php
 $ composer require helhum/sentry-typo3
 ```
 
+In case of older TYPO3 Versions (< 9.x) the provided exception handler need to be used instead of TYPO3 defaults:
+
+```php
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['debugExceptionHandler'] = \Helhum\SentryTypo3\ExceptionHandler\Development::class;
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['productionExceptionHandler'] = \Helhum\SentryTypo3\ExceptionHandler\Production::class;
+```
+
 ## Configuration
 
 Set the dsn in your global configuration. 
