@@ -14,6 +14,7 @@ class BeforeEventListener
             new RequestContext(),
             new CommandContext(),
             new UserContext(),
+            new UserContext87(),
         ];
 
         if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry']['typo3_integrations'])) {
