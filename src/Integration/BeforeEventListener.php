@@ -12,6 +12,7 @@ class BeforeEventListener
         $integrations = [
             new Typo3Context(),
             new RequestContext(),
+            new RequestContext87(),
             new CommandContext(),
             new UserContext(),
             new UserContext87(),

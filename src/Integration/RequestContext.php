@@ -30,7 +30,7 @@ class RequestContext implements ContextInterface
 
     public function appliesToEvent(Event $event): bool
     {
-        return !Environment::isCli();
+        return (class_exists(Environment::class) && !Environment::isCli());
     }
 
     public function addToEvent(Event $event): void
