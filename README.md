@@ -51,9 +51,9 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['environment'] = 'development';
 
 ## Where should I put the configuration?
 
-This depends on your use case. If you want to use Sentry only during development, you should use `AdditionalConfiguration.php` for the configuration.
+This package expects settings to be exposed in main TYPO3 configuration (aka `TYPO3_CONF_VARS). How you expose it, totally depends on your use case, your deployment strategy and project structure.
 
-If you want to use it also in production, you should use the `ext_localconf.php` of your sitepackage or theme extension.
+This means: Put the configuration in either `LocalConfiguration.php` or `AdditionalConfiguration.php` depending on your needs and structure of your project.
 
 ## How to test the connection to Sentry?
 
