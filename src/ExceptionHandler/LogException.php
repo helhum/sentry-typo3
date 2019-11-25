@@ -9,11 +9,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Only intended for use with TYPO3 < 9.
- *
- * Not an exception handler, just extends in order to make use of existing methods.
- * Only provides the logException API for provided exception handler to not duplicate code.
  */
-class LogException extends AbstractExceptionHandler
+class LogException
 {
     /**
      * @var Logger
@@ -51,11 +48,15 @@ class LogException extends AbstractExceptionHandler
         }
     }
 
-    public function echoExceptionWeb(\Throwable $exception)
+    /**
+     * Replaces the generated token with a generic equivalent
+     *
+     * @param string $requestedUrl
+     * @return string
+     */
+    protected function anonymizeToken(string $requestedUrl): string
     {
-    }
-
-    public function echoExceptionCLI(\Throwable $exception)
-    {
+        $pattern = '/(?<=[tT]oken=)[0-9a-fA-F]{40}/';
+        return preg_replace($pattern, '--AnonymizedToken--', $requestedUrl);
     }
 }
