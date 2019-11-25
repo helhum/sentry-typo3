@@ -16,7 +16,7 @@ class UserContext87 implements ContextInterface
         return class_exists(Environment::class) === false
             && defined('TYPO3_REQUESTTYPE')
             && defined('TYPO3_REQUESTTYPE_CLI')
-            && TYPO3_REQUESTTYPE !== TYPO3_REQUESTTYPE_CLI
+            && TYPO3_REQUESTTYPE_CLI ^ TYPO3_REQUESTTYPE
             ;
     }
 
