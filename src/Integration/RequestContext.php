@@ -30,7 +30,14 @@ class RequestContext implements ContextInterface
 
     public function appliesToEvent(Event $event): bool
     {
-        return (class_exists(Environment::class) && !Environment::isCli());
+        return (
+            class_exists(Environment::class) && !Environment::isCli()
+        ) || (
+            class_exists(Environment::class) === false
+            && defined('TYPO3_REQUESTTYPE')
+            && defined('TYPO3_REQUESTTYPE_CLI')
+            && TYPO3_REQUESTTYPE ^ TYPO3_REQUESTTYPE_CLI
+        );
     }
 
     public function addToEvent(Event $event): void
