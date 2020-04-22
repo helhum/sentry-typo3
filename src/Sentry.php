@@ -50,6 +50,7 @@ final class Sentry
         unset($options['typo3_integrations']);
         $httpOptions = $GLOBALS['TYPO3_CONF_VARS']['HTTP'];
         $httpOptions['verify'] = filter_var($httpOptions['verify'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? $httpOptions['verify'];
+        if (empty($httpOptions['handler'])) unset($httpOptions['handler']);
         $typo3HttpClient = Client::createWithConfig($httpOptions);
         $clientBuilder = ClientBuilder::create($options);
         $clientBuilder->setHttpClient($typo3HttpClient);

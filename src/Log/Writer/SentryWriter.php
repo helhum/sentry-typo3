@@ -61,7 +61,7 @@ class SentryWriter extends AbstractWriter
                 unset($recordData['fingerprint']);
             }
             $scope->setExtra('typo3.component', $record->getComponent());
-            $scope->setExtra('typo3.level', LogLevel::getName($record->getLevel()));
+            $scope->setExtra('typo3.level', LogLevel::getName(LogLevel::normalizeLevel($record->getLevel())));
             $scope->setExtra('typo3.request_id', $record->getRequestId());
             if (!empty($recordData['tags'])) {
                 foreach ($recordData['tags'] as $key => $value) {
