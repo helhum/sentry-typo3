@@ -25,7 +25,7 @@ class SentryBreadcrumbWriter extends AbstractWriter
         \Sentry\addBreadcrumb(
             Breadcrumb::fromArray(
                 [
-                    'level' => $this->getSeverityFromLevel($record->getLevel()),
+                    'level' => $this->getSeverityFromLevel(LogLevel::normalizeLevel($record->getLevel())),
                     'message' => $record->getMessage(),
                     'data' => $record->getData(),
                     'category' => $record->getComponent(),
