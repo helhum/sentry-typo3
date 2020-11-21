@@ -2,7 +2,11 @@
 
 Exception and error logging with Sentry, see http://www.getsentry.com
 
-The package is a wrapper for https://github.com/getsentry/sentry-php
+Sentry provides open-source and hosted error monitoring that helps all software teams discover, triage, and prioritize errors in real-time.
+
+Sentry is available as SaaS including a free plan for developers or as download for self-hosting.
+
+This package is a wrapper for https://github.com/getsentry/sentry-php
 
 ## Installation
 
@@ -12,9 +16,16 @@ $ composer require helhum/sentry-typo3
 
 ## Configuration
 
-Set the dsn in your global configuration. 
-E.g.: `$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry']['dsn'] = 'http://public_key:secret_key@your-sentry-server.com/project-id';`.
-It is possible to change / add other Sentry options with `$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry'][<sentry option>]` 
+Set the dsn in your global configuration: 
+```php
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry']['dsn'] = 'http://public_key:secret_key@your-sentry-server.com/project-id';
+```
+
+It is possible to change / add other Sentry options like this:
+
+```php
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry'][<sentry option>];
+``` 
 
 Since the integration is purely done with log writers, make sure you add at least one
 writer. It is recommended to add a global writer as follows:
@@ -32,6 +43,17 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][\TYPO3\CMS\Core\Log\Lo
     \Helhum\SentryTypo3\Log\Writer\SentryBreadcrumbWriter::class => [],
 ];
 ```
+
+If you want to have different environments to filter by in Sentry, you can set them like this:
+```php
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['environment'] = 'development';
+```
+
+## Where should I put the configuration?
+
+This package expects settings to be exposed in main TYPO3 configuration (aka `TYPO3_CONF_VARS). How you expose it, totally depends on your use case, your deployment strategy and project structure.
+
+This means: Put the configuration in either `LocalConfiguration.php` or `AdditionalConfiguration.php` depending on your needs and structure of your project.
 
 ## How to test the connection to Sentry?
 
