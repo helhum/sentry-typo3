@@ -57,11 +57,8 @@ This means: Put the configuration in either `LocalConfiguration.php` or `Additio
 
 ## How to test the connection to Sentry?
 
-Navigate to a reachable page with a not configured page type like 
-
-http://your-typo3-site.de/index.php?id=1&type=1001 
-
-This triggers a ServiceUnavailableException which will be reported.
+Run `typo3 sentry:test` cli command, that is provided and
+some messages should be reported to the configured Sentry endpoint.
 
 ## Improvements / Issues
 

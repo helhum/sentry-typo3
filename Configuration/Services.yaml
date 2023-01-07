@@ -1,0 +1,97 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Helhum\SentryTypo3\:
+        resource: '../src/*'
+
+    Helhum\SentryTypo3\SentryMessageFactory:
+        public: true
+
+    Helhum\SentryTypo3\Command\TestSentryCommand:
+        tags:
+            - name: 'console.command'
+              command: 'sentry:test'
+              description: 'Test Sentry connection and transmission'
+
+    #
+    # TYPO3 related Sentry integrations
+    #
+    Helhum\SentryTypo3\Integration\IgnoreTypo3ComponentErrorsIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'typo3-command'
+              after: 'typo3-attributes'
+        arguments:
+            $options:
+                ignore_exception_codes:
+                    - 1581862822
+                    - 1581862823
+                    - 1396795884
+                    - 1616175867
+                    - 1616175847
+                ignore_component_namespaces:
+                    - Sentry
+
+    Helhum\SentryTypo3\Integration\CommandIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'typo3-command'
+
+    Helhum\SentryTypo3\Integration\Typo3Integration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'typo3-attributes'
+
+    Helhum\SentryTypo3\Integration\UserIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'typo3-user'
+
+    Helhum\SentryTypo3\Integration\CleanupStackTraceIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'typo3-cleanup'
+
+    #
+    # Built in Sentry integrations
+    #
+    Sentry\Integration\RequestIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'sentry-request'
+
+    Sentry\Integration\EnvironmentIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'sentry-environment'
+
+    Sentry\Integration\FrameContextifierIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'sentry-frame-code-context'
+
+    Sentry\Integration\ModulesIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'sentry-composer-packages'
+
+    Sentry\Integration\TransactionIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'sentry-transaction'
+
+    Sentry\Integration\IgnoreErrorsIntegration:
+        tags:
+            - name: 'sentry.integration'
+              identifier: 'sentry-ignore-errors'
+              after: 'typo3-command'
+        arguments:
+            $options:
+                ignore_exceptions: [ ]
+                ignore_tags: { }
+
+    Sentry\Integration\RequestFetcherInterface:
+        class: Helhum\SentryTypo3\Integration\RequestFetcher
