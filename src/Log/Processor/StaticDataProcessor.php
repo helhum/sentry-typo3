@@ -15,7 +15,7 @@ class StaticDataProcessor extends AbstractProcessor
     /**
      * @var array<string, mixed>
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * @param array<string, mixed> $data
@@ -33,7 +33,9 @@ class StaticDataProcessor extends AbstractProcessor
      */
     public function processLogRecord(LogRecord $logRecord)
     {
-        $logRecord->addData($this->data);
+        $logRecord->addData(
+            array_replace_recursive($logRecord->getData(), $this->data)
+        );
 
         return $logRecord;
     }
