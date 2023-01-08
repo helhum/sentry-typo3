@@ -26,12 +26,12 @@ final class SentryMessageFactory
         ];
         if ($exception instanceof \Throwable) {
             $hintData['exception'] = $exception;
-        }
-        if (str_contains($record->getComponent(), 'ExceptionHandler')
-            || str_contains($record->getComponent(), 'ExceptionRenderer')
-        ) {
-            $hintData['mechanism'] = new ExceptionMechanism(ExceptionMechanism::TYPE_GENERIC, false);
-            $event->setMessage($exception->getMessage());
+            if (str_contains($record->getComponent(), 'ExceptionHandler')
+                || str_contains($record->getComponent(), 'ExceptionRenderer')
+            ) {
+                $hintData['mechanism'] = new ExceptionMechanism(ExceptionMechanism::TYPE_GENERIC, false);
+                $event->setMessage($exception->getMessage());
+            }
         }
         return new SentryMessage($event, EventHint::fromArray($hintData));
     }
