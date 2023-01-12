@@ -34,6 +34,11 @@ final class TestSentryCommand extends Command
             null,
             InputOption::VALUE_NONE
         );
+        $this->addOption(
+            'deprecation',
+            null,
+            InputOption::VALUE_NONE
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -51,6 +56,9 @@ final class TestSentryCommand extends Command
                 ]
             ]
         );
+        if ($input->getOption('deprecation') === true) {
+            trigger_error('Oh, no, not this again, it\'s so old 👴', \E_USER_DEPRECATED);
+        }
         if ($input->getOption('log') === true) {
             $this->logger->debug('Just a de🪲 message');
             $this->logger->info('Some ℹ️nformation');

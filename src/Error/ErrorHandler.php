@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Helhum\SentryTypo3\Error;
 
+use ErrorReporting\ErrorException;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -11,6 +12,8 @@ use Sentry\ErrorHandler as SentryErrorHandler;
 use TYPO3\CMS\Core\Error\ErrorHandler as Typo3ErrorHandler;
 use TYPO3\CMS\Core\Error\ErrorHandlerInterface;
 use TYPO3\CMS\Core\Error\Exception as Typo3ErrorException;
+use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 final class ErrorHandler implements ErrorHandlerInterface, LoggerAwareInterface
 {
@@ -38,12 +41,20 @@ final class ErrorHandler implements ErrorHandlerInterface, LoggerAwareInterface
         $sentryErrorHandler = SentryErrorHandler::registerOnceErrorHandler();
         $sentryErrorHandler->addErrorHandlerListener(function (\ErrorException $exception) {
             try {
-                $this->typo3ErrorHandler->handleError(
-                    $exception->getSeverity(),
-                    $exception->getMessage(),
-                    $exception->getFile(),
-                    $exception->getLine(),
-                );
+                $exception = ErrorException::fromErrorException($exception);
+                if ($exception->getSeverity() === E_USER_DEPRECATED || $exception->getSeverity() === E_DEPRECATED) {
+                    // Handle deprecation messages explicitly, to allow them to be logged nicely
+                    $logger = GeneralUtility::makeInstance(LogManager::class)->getLogger('TYPO3.CMS.deprecations');
+                    $logger->notice($exception->getMessage(), ['exception' => $exception]);
+                } else {
+                    // Respect TYPO3 error configuration, by letting TYPO3 error handler decide whether to log or throw
+                    $this->typo3ErrorHandler->handleError(
+                        $exception->getSeverity(),
+                        $exception->getMessage(),
+                        $exception->getFile(),
+                        $exception->getLine(),
+                    );
+                }
             } catch (Typo3ErrorException $e) {
                 $this->unHandledError = $exception;
             } catch (ErrorHandlerLogged $e) {
