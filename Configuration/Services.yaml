@@ -22,7 +22,7 @@ services:
     Helhum\SentryTypo3\Integration\IgnoreTypo3ComponentErrorsIntegration:
         tags:
             - name: 'sentry.integration'
-              identifier: 'typo3-command'
+              identifier: 'typo3-ignore-errors'
               after: 'typo3-attributes'
         arguments:
             $options:

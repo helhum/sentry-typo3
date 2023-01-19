@@ -52,12 +52,18 @@ final class SentryIntegrationsPass implements CompilerPassInterface
             ) {
                 continue;
             }
-            $service->setPublic(true);
             $this->injectSentryLogger($container, $service);
+            $configuredIntegrations = [];
             foreach ($tags as $attributes) {
-                if (($attributes['disabled'] ?? false) === true) {
+                if (($attributes['disabled'] ?? false) === true
+                    || (
+                        ($attributes['autoconfigured'] ?? false) === true
+                        && ($configuredIntegrations[$serviceName] ?? false) === true
+                    )
+                ) {
                     continue;
                 }
+                $configuredIntegrations[$serviceName] = true;
                 $integrationIdentifier = (string)($attributes['identifier'] ?? $serviceName);
                 $unorderedIntegrations[$integrationIdentifier] = [
                     'service' => $service,

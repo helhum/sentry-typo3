@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $container, ContainerBuilder $containerBuilder) {
 
-    $containerBuilder->registerForAutoconfiguration(IntegrationInterface::class)->addTag('sentry.integration');
+    $containerBuilder->registerForAutoconfiguration(IntegrationInterface::class)->addTag('sentry.integration', ['autoconfigured' => true]);
     $containerBuilder->addCompilerPass(new SentryIntegrationsPass('sentry.integration'));
 
 };
