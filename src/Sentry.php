@@ -47,8 +47,15 @@ final class Sentry
 
     public static function getFallbackLogger(): ?FallbackLogger
     {
-        self::initialize();
+        self::initializeFallbackLogger();
         return self::$fallbackLogger;
+    }
+
+    private static function initializeFallbackLogger(): void
+    {
+        if (!isset(self::$fallbackLogger) && isset($GLOBALS['TYPO3_CONF_VARS']['LOG']['Sentry']['FallbackLogger'])) {
+            self::$fallbackLogger = new FallbackLogger(GeneralUtility::makeInstance(LogManager::class)->getLogger('Sentry.FallbackLogger'));
+        }
     }
 
     private static function initialize(): bool
@@ -56,15 +63,14 @@ final class Sentry
         if (self::$initialized) {
             return true;
         }
-        $logManager = GeneralUtility::makeInstance(LogManager::class);
+        if (empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry']['dsn'])) {
+            return false;
+        }
         try {
-            if (isset($GLOBALS['TYPO3_CONF_VARS']['LOG']['Sentry']['FallbackLogger'])) {
-                self::$fallbackLogger = new FallbackLogger($logManager->getLogger('Sentry.FallbackLogger'));
-            }
             self::$messageFactory = GeneralUtility::makeInstance(SentryMessageFactory::class);
             $client = GeneralUtility::makeInstance(SentryClientFactory::class)->createClient();
         } catch (\Throwable $e) {
-            $logManager->getLogger('Sentry.Logger')
+            GeneralUtility::makeInstance(LogManager::class)->getLogger('Sentry.Logger')
                 ->error('Could not initialize Sentry, because an error occurred before DI was available', ['exception' => $e]);
             return false;
         }
