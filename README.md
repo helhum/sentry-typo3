@@ -1,6 +1,6 @@
 # Sentry TYPO3 Integration
 
-Exception and error logging with Sentry, see http://www.getsentry.com
+Exception and error logging with Sentry, see https://sentry.io
 
 Sentry provides open-source and hosted error monitoring that helps all software teams discover, triage, and prioritize errors in real-time.
 
@@ -39,9 +39,7 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][\TYPO3\CMS\Core\Log\Lo
 To get additional information for each error/warning logged, add the breadcrumb writer as well
 
 ```php
-$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][\TYPO3\CMS\Core\Log\LogLevel::WARNING] = [
-    \Helhum\SentryTypo3\Log\Writer\SentryBreadcrumbWriter::class => [],
-];
+$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][\TYPO3\CMS\Core\Log\LogLevel::WARNING][\Helhum\SentryTypo3\Log\Writer\SentryBreadcrumbWriter::class] = [];
 ```
 
 If you want to have different environments to filter by in Sentry, you can set them like this:
