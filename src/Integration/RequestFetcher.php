@@ -7,6 +7,7 @@ namespace Helhum\SentryTypo3\Integration;
 use Psr\Http\Message\ServerRequestInterface;
 use Sentry\Integration\RequestFetcherInterface;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\ServerRequestFactory;
 
 final class RequestFetcher implements RequestFetcherInterface
 {
@@ -15,10 +16,10 @@ final class RequestFetcher implements RequestFetcherInterface
      */
     public function fetchRequest(): ?ServerRequestInterface
     {
-        if (!isset($GLOBALS['TYPO3_REQUEST']) || Environment::isCli()) {
+        if (Environment::isCli()) {
             return null;
         }
 
-        return $GLOBALS['TYPO3_REQUEST'];
+        return $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
     }
 }
