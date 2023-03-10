@@ -35,7 +35,7 @@ class UserIntegration extends AbstractEventProcessingIntegration
             'ip_address' => GeneralUtility::getIndpEnv('REMOTE_ADDR'),
         ];
         $request = $this->requestFetcher->fetchRequest();
-        if ($request instanceof ServerRequestInterface) {
+        if ($request instanceof ServerRequestInterface && $request->getAttribute('applicationType') !== null) {
             $userType = ApplicationType::fromRequest($request)->isFrontend() ? 'frontend' : 'backend';
             /** @var UserAspect $userAspect */
             $userAspect = GeneralUtility::makeInstance(Context::class)->getAspect($userType . '.user');
