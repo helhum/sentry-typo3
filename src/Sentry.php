@@ -63,7 +63,7 @@ final class Sentry
         if (self::$initialized) {
             return true;
         }
-        if (empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry']['dsn'])) {
+        if (empty($_SERVER['SENTRY_DSN']) && empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sentry']['dsn'])) {
             return false;
         }
         try {
